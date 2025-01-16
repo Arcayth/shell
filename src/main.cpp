@@ -22,7 +22,8 @@ void handle_exit() {
 }
 
 void handle_echo(string input) {
-    string args = input.substr(input.find("echo "));
+    // 5 is the lenght of "echo "
+    string args = input.substr(5);
     cout << args << endl;
 }
 
