@@ -39,6 +39,7 @@ void handle_type(string input) {
             break;
         default:
             cout << cmd << " is a shell builtin" << endl;
+            break;
     }
 
 
