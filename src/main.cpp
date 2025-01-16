@@ -31,19 +31,15 @@ void handle_echo(string input) {
 void handle_type(string input) {
     // 5 is the lenght of "type "
     string args = input.substr(5);
-    string cmd = args.substr(0, input.find(" "));
 
     switch (command_parser(args)) {
         case UNKNOWN:
-            cout << cmd << ": not found\n";
+            cout << args << ": not found\n";
             break;
         default:
-            cout << cmd << " is a shell builtin\n";
+            cout << args << " is a shell builtin\n";
             break;
     }
-
-
-    cout << cmd << ": command not found\n";
 }
 
 void handle_unknown(string input) {
