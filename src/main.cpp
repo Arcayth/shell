@@ -1,18 +1,24 @@
 #include <cstdlib>
 #include <iostream>
 
+using namespace std;
+
 int main() {
     // Flush after every std::cout / std:cerr
-    std::cout << std::unitbuf;
-    std::cerr << std::unitbuf;
+    cout << unitbuf;
+    cerr << unitbuf;
 
-    std::string input;
-    do {
-        std::cout << "$ ";
+    string input;
 
-        std::getline(std::cin, input);
-        std::cout << input << ": command not found\n";
-    } while(input != "exit");
+    while (true) {
+        cout << "$ ";
 
-    exit(0);
+        getline(cin, input);
+        string cmd = input.substr(0, input.find(" "));
+        if (cmd == "exit") {
+            exit(0);
+        }
+
+        cout << input << ": command not found\n";
+    }
 }
