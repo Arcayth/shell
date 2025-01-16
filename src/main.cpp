@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 
 int main() {
@@ -6,11 +7,12 @@ int main() {
     std::cerr << std::unitbuf;
 
     std::string input;
-
-    while (true) {
+    do {
         std::cout << "$ ";
 
         std::getline(std::cin, input);
         std::cout << input << ": command not found\n";
-    }
+    } while(input != "exit");
+
+    exit(0);
 }
