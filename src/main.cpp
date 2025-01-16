@@ -44,9 +44,9 @@ int main() {
         CMD cmd = command_parser(input);
 
         switch (cmd) {
-            case EXIT: exit(0);
-            case ECHO: exit(0);
-            case UNKNOWN: exit(0);
+            case EXIT: handle_exit();
+            case ECHO: handle_echo(input);
+            case UNKNOWN: handle_unknown(input);
         }
 
     }
