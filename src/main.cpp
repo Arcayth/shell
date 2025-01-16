@@ -33,7 +33,7 @@ void handle_type(string input) {
     string args = input.substr(5);
     string cmd = args.substr(0, input.find(" "));
 
-    switch (command_parser(cmd)) {
+    switch (command_parser(args)) {
         case UNKNOWN:
             cout << cmd << ": not found\n";
             break;
