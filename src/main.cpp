@@ -35,10 +35,10 @@ void handle_type(string input) {
 
     switch (command_parser(cmd)) {
         case UNKNOWN:
-            cout << cmd << ": not found:" << endl;
+            cout << cmd << ": not found\n";
             break;
         default:
-            cout << cmd << " is a shell builtin" << endl;
+            cout << cmd << " is a shell builtin\n";
             break;
     }
 
