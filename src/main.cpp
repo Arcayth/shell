@@ -1,7 +1,16 @@
+#include <cstddef>
+#include <cstdio>
 #include <cstdlib>
+#include <cstring>
+#include <filesystem>
 #include <iostream>
+#include <optional>
+#include <vector>
+#include <format>
+
 
 using namespace std;
+namespace fs = filesystem;
 
 enum CMD {
     EXIT,
@@ -22,23 +31,59 @@ void handle_exit() {
     exit(0);
 }
 
-void handle_echo(string input) {
+void handle_echo(const string input) {
     // 5 is the lenght of "echo "
-    string args = input.substr(5);
-    cout << args << endl;
+    string cmd = input.substr(5);
+    cout << cmd << endl;
+}
+
+vector<string> split(string input, const string delimiter) {
+    vector<string> tokens;
+    string token;
+    size_t pos = 0;
+
+    while ((pos = input.find(delimiter)) != string::npos) {
+        token = input.substr(0, pos);
+        tokens.push_back(token);
+        input.erase(0, pos + delimiter.length());
+    }
+
+    return tokens;
+}
+
+bool check_path(string path, string cmd) {
+    string cmd_path = path + "/" + cmd;
+    if (fs::exists(cmd_path)) {
+        return true;
+    }
+    return false;
 }
 
 void handle_type(string input) {
     // 5 is the lenght of "type "
-    string args = input.substr(5);
+    string cmd = input.substr(5);
+    char* path = getenv("PATH");
+    vector<string> paths = split(path, ":");
+    bool is_valid_path;
 
-    switch (command_parser(args)) {
+
+    switch (command_parser(cmd)) {
+        case EXIT: case ECHO: case TYPE:
+            cout << cmd << " is a shell builtin\n";
+            break;
         case UNKNOWN:
-            cout << args << ": not found\n";
-            break;
-        default:
-            cout << args << " is a shell builtin\n";
-            break;
+            bool found = false;
+            for (int i = 0; i < paths.size(); i++) {
+                if (check_path(paths[i], cmd)) {
+                    cout << cmd +  " is " +  paths[i] + "/" + cmd << endl;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                cout << cmd << ": not found\n";
+                break;
+            }
     }
 }
 
