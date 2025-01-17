@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <iostream>
 #include <optional>
+#include <tuple>
 #include <vector>
 #include <format>
 
@@ -47,6 +48,7 @@ vector<string> split(string input, const string delimiter) {
         tokens.push_back(token);
         input.erase(0, pos + delimiter.length());
     }
+    tokens.push_back(input);
 
     return tokens;
 }
@@ -59,12 +61,22 @@ bool check_path(string path, string cmd) {
     return false;
 }
 
-void handle_type(string input) {
-    // 5 is the lenght of "type "
-    string cmd = input.substr(5);
+tuple<string, bool> get_path(string cmd) {
     char* path = getenv("PATH");
     vector<string> paths = split(path, ":");
     bool is_valid_path;
+    for (int i = 0; i < paths.size(); i++) {
+        if (check_path(paths[i], cmd)) {
+            string path = paths[i] + "/" + cmd;
+            return make_tuple(path, true);
+        }
+    }
+    return make_tuple("", false);
+}
+
+void handle_type(string input) {
+    // 5 is the lenght of "type "
+    string cmd = input.substr(5);
 
 
     switch (command_parser(cmd)) {
@@ -72,15 +84,13 @@ void handle_type(string input) {
             cout << cmd << " is a shell builtin\n";
             break;
         case UNKNOWN:
+            string path;
             bool found = false;
-            for (int i = 0; i < paths.size(); i++) {
-                if (check_path(paths[i], cmd)) {
-                    cout << cmd +  " is " +  paths[i] + "/" + cmd << endl;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
+            tie(path, found) = get_path(cmd);
+            if (found) {
+                cout <<  cmd +  " is " +  path << endl;
+                break;
+            } else {
                 cout << cmd << ": not found\n";
                 break;
             }
@@ -88,8 +98,17 @@ void handle_type(string input) {
 }
 
 void handle_unknown(string input) {
-    string cmd = input.substr(0, input.find(" "));
-    cout << cmd << ": command not found\n";
+    vector<string> args = split(input, " ");
+    string path;
+    bool found = false;
+    tie(path, found) = get_path(args[0]);
+
+    if (found) {
+        string command = "exec " + args[0] + " " + args[1];
+        system(command.c_str());
+    } else {
+        cout << input << ": command not found\n";
+    }
 }
 
 int main() {
