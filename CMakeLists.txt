@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 # Project name
-project(shell-starter-cpp)
+project(shell)
 
 # Set the C++ standard to C++23
 set(CMAKE_CXX_STANDARD 23)

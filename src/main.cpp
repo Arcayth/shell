@@ -34,14 +34,6 @@ CMD command_parser(string cmd) {
     return UNKNOWN;
 }
 
-void handle_exit() { exit(0); }
-
-void handle_echo(const string input) {
-    // 5 is the lenght of "echo "
-    string cmd = input.substr(5);
-    cout << cmd << endl;
-}
-
 vector<string> split(string input, const string delimiter) {
     vector<string> tokens;
     string token;
@@ -56,6 +48,14 @@ vector<string> split(string input, const string delimiter) {
 
     return tokens;
 }
+
+void handle_exit() { exit(0); }
+
+void handle_echo(string input) {
+    vector<string> args = split(input, " ");
+    cout << args[1] << endl;
+}
+
 
 bool check_path(string path, string cmd) {
     string cmd_path = path + "/" + cmd;
