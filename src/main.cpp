@@ -124,8 +124,14 @@ void handle_pwd() {
 
 void handle_cd(string input) {
     vector<string> args= split(input, " ");
+    string path = args[1];
     try {
-        fs::current_path(args[1]);
+        if (args[1] == "~"){
+            char* path = getenv("HOME");
+            fs::current_path(path);
+        } else {
+            fs::current_path(args[1]);
+        }
     } catch (const fs::__cxx11::filesystem_error _) {
         cerr << "cd: " + args[1] + ": No such file or directory" << endl;
     }
