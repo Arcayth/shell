@@ -1,3 +1,4 @@
+#include <complex>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
@@ -49,11 +50,28 @@ vector<string> split(string input, const string delimiter) {
     return tokens;
 }
 
+void replaceAll(std::string& str, const std::string& from, const std::string& to) {
+    if(from.empty())
+        return;
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+    }
+}
+
 void handle_exit() { exit(0); }
 
 void handle_echo(string input) {
-    vector<string> args = split(input, " ");
-    cout << args[1] << endl;
+    string arg = input.substr(5);
+    size_t start_pos = 0;
+    string from = "'";
+    string to = "";
+    while((start_pos = arg.find(from,  start_pos)) != std::string::npos) {
+        arg.replace(start_pos, from.length(), to);
+    }
+    cout << arg << endl;
+
 }
 
 
